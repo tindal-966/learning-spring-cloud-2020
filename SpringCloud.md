@@ -96,7 +96,6 @@ https://start.spring.io/actuator/info
 - `@LoadBalanced` 负载均衡，貌似和 Ribbon 有关
 
 ### Eureka 的自我保护模式
-
 属于 CAP 的 AP。策略是暂时认为服务还是可用的，只是现在的网络出现了问题，网络恢复的之后服务就会恢复
 > spring-cloud-starter-netflix-eureka-client 默认配置是 CAP 的 AP
 >
@@ -105,3 +104,19 @@ https://start.spring.io/actuator/info
 参考：
 - [https://www.baeldung.com/eureka-self-preservation-renewal](https://www.baeldung.com/eureka-self-preservation-renewal)
 - [https://github.com/Netflix/eureka/wiki/Server-Self-Preservation-Mode](https://github.com/Netflix/eureka/wiki/Server-Self-Preservation-Mode)
+
+### Eureka, zookeeper, Consul 异同
+| 组件名 | 语言 | CAP | 服务健康检查 | 对外暴露接口 | SpringCloud 集成 |
+| -- | --- | --- | --- | --- | --- |
+| Eureka | Java | AP | 可配支持 | HTTP | Y |
+| Zookeeper | Java | CP | Yes | 客户端 | Y |
+| Consul | Go | CP | Yes | HTTP/DNS | Y |
+
+### Ribbon
+Load Balance 的四种方式：
+1. 客户端
+2. 服务端
+3. 集中式
+4. 进程内
+
+Ribbon 属于 *客户端+进程内*，Nginx 属于 *服务端+集中式*
