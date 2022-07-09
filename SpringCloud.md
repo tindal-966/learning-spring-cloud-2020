@@ -120,3 +120,12 @@ Load Balance 的四种方式：
 4. 进程内
 
 Ribbon 属于 *客户端+进程内*，Nginx 属于 *服务端+集中式*
+
+Ribbon 负载均衡算法自带实现查看 `IRule` 接口
+- RoundRobinRule
+- RandomRule
+- RetryRule 先 Round ，获取失败则在有限时重试
+- WeightedResponseTimeRule 选择响应速度快的
+- BestAvailableRule 过滤断路的，选并发最小的
+- AvailabilityFilteringRule 先过滤故障的，选并发小的
+- ZoneAvoidanceRule 判断 service 所在区域的性能和可用性来选择（默认）
