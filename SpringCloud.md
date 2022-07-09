@@ -1,3 +1,14 @@
+### 项目目录
+- cloud-api-commons 实体类公共模块
+- cloud-consumer-order80 消费者 order Eureka 服务注册
+- cloud-consumer-order80-zk 消费者 order zookeeper 服务注册
+- cloud-eureka-server7001 Eureka 服务
+- cloud-eureka-server7002 Eureka 服务
+- cloud-provider-payment8001 提供者 payment Eureka 服务注册
+- cloud-provider-payment8002 提供者 payment Eureka 服务注册
+- cloud-provider-payment8004 提供者 payment zookeeper 服务注册
+
+
 ### SpringCloud 依赖 SpringBoot 的具体版本要求
 > 建议参考 SpringCloud 版本的具体说明，会有具体的 SpringBoot 版本指定
 https://start.spring.io/actuator/info
