@@ -87,6 +87,9 @@ https://start.spring.io/actuator/info
 ### Eureka 的自我保护模式
 
 属于 CAP 的 AP。策略是暂时认为服务还是可用的，只是现在的网络出现了问题，网络恢复的之后服务就会恢复
+> spring-cloud-starter-netflix-eureka-client 默认配置是 CAP 的 AP
+>
+> spring-cloud-starter-zookeeper-discovery 默认配置是 CAP 的 CP
 
 参考：
 - [https://www.baeldung.com/eureka-self-preservation-renewal](https://www.baeldung.com/eureka-self-preservation-renewal)
