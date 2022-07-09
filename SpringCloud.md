@@ -1,4 +1,5 @@
-### Spring Cloud 依赖 Spring Boot 的具体版本要求
+### SpringCloud 依赖 SpringBoot 的具体版本要求
+> 建议参考 SpringCloud 版本的具体说明，会有具体的 SpringBoot 版本指定
 https://start.spring.io/actuator/info
 
 ### 2020 年 SpringCloud 生态变化
@@ -37,3 +38,45 @@ https://start.spring.io/actuator/info
 ### 参考仓库，用来复制配置等内容
 - [lixiaogou/cloud2020](https://gitee.com/lixiaogou/cloud2020) 比较新
 - [cunjinFS/SpringCloud](https://gitee.com/cunjinFS/SpringCloud) 有 SQL, 脑图等资源
+
+### IDEA 设置 Spring Devtools
+- [官方文档](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools)
+
+> 建议先按照官方文档配置，无效之后再按照下面的配置
+
+1. Add devtools to proj
+    ``` xml
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+        <scope>runtime</scope>
+        <optional>true</optional>
+    </dependency>
+    ```
+2. Add plugin to pom.xml
+
+    在 parent pom 文件中添加
+    ``` xml
+    <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>2.2.2.RELEASE</version>
+        <configuration>
+            <fork>true</fork>
+            <addResources>true</addResources>
+        </configuration>
+    </plugin>
+    ```
+3. Enabling automatic build
+    「Build, Execution, Deployment -> Compiler」
+
+    - [x] Automatically show first error in editor
+    - [x] Display notification on build completion
+    - [x] Build project automatically
+    - [x] Compile independent modules in parallel
+4. Update the value of 
+    press `ctrl+shift+Alt+/` and search `Registry`, enable
+    - `compiler.automake.allow.when.app.running`
+    - `action.System.assertFocusAccessFromEdt`
+5. Reboot IDEA
+

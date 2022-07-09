@@ -19,12 +19,12 @@ public class PaymentController {
     }
 
     @PostMapping("/create")
-    public CommonResult create(Payment payment) {
-        int i = paymentService.create(payment);
+    public CommonResult create(@RequestBody Payment payment) {
+        Payment payment1 = paymentService.create(payment);
 
-        if (i != 0) {
+        if (payment1 != null) {
             log.info("创建成功");
-            return new CommonResult(200, "success");
+            return new CommonResult(200, "success", payment1);
         }
 
         return new CommonResult(500, "failed");

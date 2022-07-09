@@ -16,8 +16,13 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public int create(Payment payment) {
-        return paymentDao.create(payment);
+    public Payment create(Payment payment) {
+        int i = paymentDao.create(payment);
+        if (i != 0) {
+            return payment;
+        }
+
+        return null;
     }
 
     @Override
