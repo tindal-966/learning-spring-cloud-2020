@@ -80,3 +80,6 @@ https://start.spring.io/actuator/info
     - `action.System.assertFocusAccessFromEdt`
 5. Reboot IDEA
 
+### 几个比较重要的注解
+- `@EnableDiscoveryClient` 
+- `@LoadBalanced` 负载均衡，貌似和 Ribbon 有关

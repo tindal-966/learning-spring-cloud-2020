@@ -6,7 +6,11 @@ import org.example.springcloud.entities.Payment;
 import org.example.springcloud.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -21,6 +25,9 @@ public class PaymentController {
 
     @Value("${server.port}")
     private String serverPort;
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
 
     @PostMapping("/create")
     public CommonResult create(@RequestBody Payment payment) {
@@ -44,6 +51,20 @@ public class PaymentController {
 
         log.info("获取失败，ID:" + id);
         return new CommonResult(400, "failed", null);
+    }
+
+    @GetMapping("/discoveryClient")
+    public Object discoveryClient() {
+        List<String> services = discoveryClient.getServices();
+        for (String service : services) {
+            List<ServiceInstance> instances = discoveryClient.getInstances(service);
+            for (ServiceInstance instance : instances) {
+                log.info(String.format("\tService: [%s]; \n\tinstance:[%s]\t[%s:%s] \n", service,
+                        instance.getInstanceId(), instance.getHost(), instance.getPort()));
+            }
+        }
+
+        return services;
     }
 
 }
