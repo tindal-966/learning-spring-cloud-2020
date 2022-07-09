@@ -15,3 +15,8 @@ services:
     image: zookeeper:3.5
     ports:
       - 2181:2181
+  consul1.12:
+    container_name: consul1.12
+    image: consul:1.12
+    ports:
+      - 8500:8500
