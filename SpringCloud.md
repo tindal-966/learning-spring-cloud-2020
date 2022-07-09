@@ -4,7 +4,7 @@ https://start.spring.io/actuator/info
 
 ### 2020 年 SpringCloud 生态变化
 - 服务发现
-    - x Ereku
+    - x Eureka
     - Zookeeper
     - Consul
     - Nacos
@@ -83,3 +83,11 @@ https://start.spring.io/actuator/info
 ### 几个比较重要的注解
 - `@EnableDiscoveryClient` 
 - `@LoadBalanced` 负载均衡，貌似和 Ribbon 有关
+
+### Eureka 的自我保护模式
+
+属于 CAP 的 AP。策略是暂时认为服务还是可用的，只是现在的网络出现了问题，网络恢复的之后服务就会恢复
+
+参考：
+- [https://www.baeldung.com/eureka-self-preservation-renewal](https://www.baeldung.com/eureka-self-preservation-renewal)
+- [https://github.com/Netflix/eureka/wiki/Server-Self-Preservation-Mode](https://github.com/Netflix/eureka/wiki/Server-Self-Preservation-Mode)
