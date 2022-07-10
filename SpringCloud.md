@@ -24,11 +24,11 @@
     - `@EnableDiscoveryClient` Zookeeper, Consul 注册服务使用
 5. 服务间调用使用 OpenFeign（内置 Ribbon 支持。使用需要先抽服务接口，开始像 Dubbo 了）
     
-    解决了什么问题？服务间调用可以复用和直接使用 service interface，直接添加有关注解即可
+    解决了什么问题？服务间调用可以直接使用被调用者的 service 定义（实现类保留 @RequestMapping 变接口 or 接口补充 @RequestMapping）
     
     新问题：
     1. 启动类只需要添加 `@@EnableFeignClients`，无需再指明服务注册中心的类型，所以是怎么判断的？
-    2. 服务 interface 需要带上 `@RequestMapping` 说明，正常编程来说是 interface impl 才指明的，这个时候应该两个都需要了，只能人为协调，有没有更优雅的方式？
+    2. 服务 interface 需要带上 `@RequestMapping` 说明，正常编程来说是 interface impl 才指明的，这个时候只能人为联动，容易犯错，有没有更优雅的方式？
 
 
 ### SpringCloud 对 SpringBoot 的版本要求
@@ -150,3 +150,13 @@ Ribbon 负载均衡算法自带实现查看 `IRule` 接口，抽象实现 `Abstr
 - BestAvailableRule 过滤断路的，选并发最小的
 - AvailabilityFilteringRule 先过滤故障的，选并发小的
 - ZoneAvoidanceRule 判断 service 所在区域的性能和可用性来选择（默认）
+
+### OpenFeign 超时
+OpenFeign 的超时由内置的 Ribbon 控制，默认 1s，设置
+```yml
+ribbon:
+  #指的是建立连接所用的时间，适用于网络状况正常的情况下, 两端连接所用的时间
+  ReadTimeout: 5000
+  #指的是建立连接后从服务器读取到可用资源所用的时间
+  ConnectTimeout: 5000
+```
