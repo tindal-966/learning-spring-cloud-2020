@@ -22,7 +22,13 @@
 4. Module 启动类添加注解
     - `@EnableEurekaClient` Eureka 注册 client 使用
     - `@EnableDiscoveryClient` Zookeeper, Consul 注册服务使用
-5. 服务间调用使用 RestTemplate，外加 Ribbon 的 `@LoadBalanced` 负载均衡
+5. 服务间调用使用 OpenFeign（内置 Ribbon 支持。使用需要先抽服务接口，开始像 Dubbo 了）
+    
+    解决了什么问题？服务间调用可以复用和直接使用 service interface，直接添加有关注解即可
+    
+    新问题：
+    1. 启动类只需要添加 `@@EnableFeignClients`，无需再指明服务注册中心的类型，所以是怎么判断的？
+    2. 服务 interface 需要带上 `@RequestMapping` 说明，正常编程来说是 interface impl 才指明的，这个时候应该两个都需要了，只能人为协调，有没有更优雅的方式？
 
 
 ### SpringCloud 对 SpringBoot 的版本要求
