@@ -6,12 +6,27 @@
 - cloud-eureka-server7002 Eureka 服务
 - cloud-provider-payment8001 提供者 payment Eureka 服务注册
 - cloud-provider-payment8002 提供者 payment Eureka 服务注册
-- cloud-provider-payment8004 提供者 payment zookeeper 服务注册
+- cloud-provider-payment8004-zk 提供者 payment zookeeper 服务注册
+- cloud-provider-payment8004-consul 提供者 payment consul 服务注册
+
+### Diff with Spring Web
+> 截至当前
+1. Module 基本都需要表明自己的 `spring.application.name` 作为服务注册名
+2. 添加了服务注册有关依赖以及有关的连接配置
+    - spring-boot-starter-actuator 在服务注册中暴露 check health 接口
+    - 注册中心
+      - spring-cloud-starter-netflix-eureka-client 使用 Eureka 注册中心
+      - spring-cloud-starter-zookeeper-discovery 使用 Zookeeper 注册中心
+      - spring-cloud-starter-consul-discovery 使用 Consul 注册中心
+3. 需要启动有关的注册中心，Eureka/Zookeeper/Consul（Eureka 注册中心需要自编码并启动）
+4. Module 启动类添加注解
+    - `@EnableEurekaClient` Eureka 注册 client 使用
+    - `@EnableDiscoveryClient` Zookeeper, Consul 注册服务使用
+5. 服务间调用使用 RestTemplate，外加 Ribbon 的 `@LoadBalanced` 负载均衡
 
 
-### SpringCloud 依赖 SpringBoot 的具体版本要求
-> 建议参考 SpringCloud 版本的具体说明，会有具体的 SpringBoot 版本指定
-https://start.spring.io/actuator/info
+### SpringCloud 对 SpringBoot 的版本要求
+建议参考 SpringCloud 版本的具体说明，会有具体的 SpringBoot 版本指定。另，可参考 [这里](https://start.spring.io/actuator/info)
 
 ### 2020 年 SpringCloud 生态变化
 - 服务发现
@@ -27,8 +42,8 @@ https://start.spring.io/actuator/info
     - OpenFeign
 - 服务降级
     - x Hystrix
-    - resilience4j (国外)
-    - sentienl (alibaba)
+    - resilience4j (国外常用)
+    - sentienl (alibaba 开发，国内常用)
 - 服务网关
     - x Zuul
     - gateway
