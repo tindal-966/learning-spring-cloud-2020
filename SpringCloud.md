@@ -26,7 +26,7 @@
 4. 启动类添加注解
     - `@EnableEurekaClient` Eureka 注册 client 使用
     - `@EnableDiscoveryClient` Zookeeper, Consul 注册服务使用
-    - `@EnableCircuitBreaker ` Hystrix 启用降级、熔断
+    - `@EnableHystrix` 启用 Hystrix（或者使用 `@EnableCircuitBreaker`）
 5. 服务间调用使用 OpenFeign（内置 Ribbon 支持。使用需要先抽服务接口，开始像 Dubbo 了）
     
     解决了什么问题？服务间调用可以直接使用被调用者的 service 定义（实现类保留 @RequestMapping 变接口 or 接口补充 @RequestMapping）
