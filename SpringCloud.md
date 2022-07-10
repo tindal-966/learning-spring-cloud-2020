@@ -198,3 +198,32 @@ provider, consumer 是有意义的。如果使用 client, server 容易混乱，
 - [Spring-framework milestone:6.0M1 已解决这个问题，不会再注册只有 @RequestMapping 的接口/类](https://github.com/spring-projects/spring-framework/issues/22154#issuecomment-936906502)
 - [spring-cloud-openfeign 建议不要这样使用（截至 v3.1.3 都提示不支持）](https://github.com/spring-cloud/spring-cloud-openfeign/issues/678)
     > [v3.1.3 doc](https://docs.spring.io/spring-cloud-openfeign/docs/3.1.3/reference/html/#spring-cloud-feign-inheritance)
+
+补充：Spring Web 新建 Controller 新建接口并添加 `@RequestMapping` 注解导致的一些问题
+``` java
+// 依赖：
+//<dependency>
+//    <groupId>org.springframework.boot</groupId>
+//    <artifactId>spring-boot-starter-web</artifactId>
+//    <version>2.2.2.RELEASE</version>
+//</dependency>
+
+// Controller 类：
+@RestController
+public class Controller implements ControllerInterface {
+    @GetMapping("/hello")
+    public String greeting() {
+        return "hello, world";
+    }
+}
+
+// ControllerInterface 类：
+@RequestMapping("/i")
+public interface ControllerInterface {
+    @GetMapping("/hello")
+    String greeting();
+}
+```
+此时，调用 `/hello` 404，调用 `/i/hello` 正常
+- 如果 Controller 也添加 `@RequestMapping("/i")`，调用 `/i/hello` 正常
+- 如果 Controller 添加 `@RequestMapping("/other")`，调用 `/other/hello` 正常，调用 `/i/hello` 404
