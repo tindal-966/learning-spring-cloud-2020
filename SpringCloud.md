@@ -1,10 +1,14 @@
 ### 项目目录
 - cloud-api-commons 实体类公共模块
 - cloud-consumer-order80 消费者 order Eureka 服务注册
-- cloud-consumer-order80-zk 消费者 order zookeeper 服务注册
+- cloud-consumer-order80-zk 消费者 order Zookeeper 服务注册
+- cloud-consumer-order80-consul 消费者 order Consul 服务注册
+- cloud-consumer-order80-feign 消费者 order Feign 调用
+- cloud-consumer-order80-feign-hystrix 消费者 order Feign 调用，Hystrix 降级
 - cloud-eureka-server7001 Eureka 服务
 - cloud-eureka-server7002 Eureka 服务
 - cloud-provider-payment8001 提供者 payment Eureka 服务注册
+- cloud-provider-payment8001-hystrix 提供者 payment Hystrix 服务降级
 - cloud-provider-payment8002 提供者 payment Eureka 服务注册
 - cloud-provider-payment8004-zk 提供者 payment zookeeper 服务注册
 - cloud-provider-payment8004-consul 提供者 payment consul 服务注册
@@ -19,9 +23,10 @@
       - spring-cloud-starter-zookeeper-discovery 使用 Zookeeper 注册中心
       - spring-cloud-starter-consul-discovery 使用 Consul 注册中心
 3. 需要启动有关的注册中心，Eureka/Zookeeper/Consul（Eureka 注册中心需要自编码并启动）
-4. Module 启动类添加注解
+4. 启动类添加注解
     - `@EnableEurekaClient` Eureka 注册 client 使用
     - `@EnableDiscoveryClient` Zookeeper, Consul 注册服务使用
+    - `@EnableCircuitBreaker ` Hystrix 启用降级、熔断
 5. 服务间调用使用 OpenFeign（内置 Ribbon 支持。使用需要先抽服务接口，开始像 Dubbo 了）
     
     解决了什么问题？服务间调用可以直接使用被调用者的 service 定义（实现类保留 @RequestMapping 变接口 or 接口补充 @RequestMapping）
@@ -29,6 +34,7 @@
     新问题：
     1. 启动类只需要添加 `@@EnableFeignClients`，无需再指明服务注册中心的类型，所以是怎么判断的？
     2. 服务 interface 需要带上 `@RequestMapping` 说明，正常编程来说是 interface impl 才指明的，这个时候只能人为联动，容易犯错，有没有更优雅的方式？
+6. 添加降级、熔断处理代码 `@HystrixCommand`（provider-side, consumer-side 皆可）
 
 
 ### SpringCloud 对 SpringBoot 的版本要求
@@ -163,5 +169,10 @@ ribbon:
 ### Hystrix
 作用：
 - Fallback 降级
-- break 熔断
-- FlowLimit 限流 
+- Break 熔断（貌似只要启用了，服务端报错就会马上使用降级的服务作替换）
+- FlowLimit 限流
+
+Hystrix 的三个功能都可以实现 provider-side 和 consumer-side 的控制
+
+### 服务间称呼
+provider, consumer 是有意义的。如果使用 client, server 容易混乱，因为 client 也是一个 service
