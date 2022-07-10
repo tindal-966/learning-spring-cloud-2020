@@ -49,7 +49,7 @@
 - 服务降级
     - x Hystrix
     - resilience4j (国外常用)
-    - sentienl (alibaba 开发，国内常用)
+    - sentinel (alibaba 开发，国内常用)
 - 服务网关
     - x Zuul
     - gateway
@@ -160,3 +160,8 @@ ribbon:
   #指的是建立连接后从服务器读取到可用资源所用的时间
   ConnectTimeout: 5000
 ```
+### Hystrix
+作用：
+- Fallback 降级
+- break 熔断
+- FlowLimit 限流 
