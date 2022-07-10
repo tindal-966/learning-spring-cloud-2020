@@ -30,3 +30,7 @@ logging:
   level:
     # feign 日志以 debug 级别监控 org.example.springcloud.service.PaymentService 接口
     org.example.springcloud.service.PaymentService: debug
+
+feign:
+  hystrix:
+    enabled: true # If true, an OpenFeign clint will be wrapped with a Hystrix circuit break.

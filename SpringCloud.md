@@ -169,6 +169,10 @@ ribbon:
 ### Hystrix
 作用：
 - Fallback 降级
+    
+    降级的维度：
+    - 对 service 自己的降级（`@HystrixCommand` 实现），包括 provider, consumer 对自己降级保护 
+    - 对 provider 的降级（在 `@FeignClient` 中指明 fallback 属性）
 - Break 熔断（貌似只要启用了，服务端报错就会马上使用降级的服务作替换）
 - FlowLimit 限流
 
@@ -176,3 +180,21 @@ Hystrix 的三个功能都可以实现 provider-side 和 consumer-side 的控制
 
 ### 服务间称呼
 provider, consumer 是有意义的。如果使用 client, server 容易混乱，因为 client 也是一个 service
+
+### @FeignClient & class-level @RequestMapping 问题
+在 interface 同时使用 `@FeignClient` 和 `@RequestMapping` ，而且在有该接口的实现类时可能会引发 **Ambiguous mapping.** 问题
+> 基于 spring-boot-starters:2.2.2.RELEASE 和 spring-cloud-openfeign:2.2.1.RELEASE
+
+大致说明：Spring 旧版本会将带有 `@RequestMapping` 注解的接口/类注册为 HandlerMethods，导致后续真正需要注册的实现类冲突（顺序也有可能反过来，总之就是重复注册）
+
+解决：
+- 使用 `@FeignClient` 的 path 替代 `@RequestMapping`
+- 将 `@RequestMapping` 全部复制到 method 中
+- 按照参考的第一个链接做修改
+
+参考：
+- [中文的代码分析](https://blog.csdn.net/aileitianshi/article/details/95980329)
+- [spring-cloud-netflix github issues 上的讨论](https://github.com/spring-cloud/spring-cloud-netflix/issues/466)
+- [Spring-framework milestone:6.0M1 已解决这个问题，不会再注册只有 @RequestMapping 的接口/类](https://github.com/spring-projects/spring-framework/issues/22154#issuecomment-936906502)
+- [spring-cloud-openfeign 建议不要这样使用（截至 v3.1.3 都提示不支持）](https://github.com/spring-cloud/spring-cloud-openfeign/issues/678)
+    > [v3.1.3 doc](https://docs.spring.io/spring-cloud-openfeign/docs/3.1.3/reference/html/#spring-cloud-feign-inheritance)
