@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@RestController()
+@RestController
 @RequestMapping("/payment")
 public class PaymentController {
     @Autowired
@@ -30,6 +30,13 @@ public class PaymentController {
     public String paymentInfoTimeOut(@PathVariable("id") Integer id) {
         String result = paymentService.paymentInfo_TimeOut(id);
         log.info("result: " + result);
+        return result;
+    }
+
+    @GetMapping("/circuit/{id}")
+    public String paymentCircuitBreaker(@PathVariable("id") Integer id) {
+        String result = paymentService.paymentCircuitBreaker(id);
+        log.info("****result: " + result);
         return result;
     }
 }
