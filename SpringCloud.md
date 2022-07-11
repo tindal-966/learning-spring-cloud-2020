@@ -1,19 +1,3 @@
-### 项目目录
-- cloud-api-commons 实体类公共模块
-- cloud-consumer-hystrix-dashboard9001 Hystrix Dashboard
-- cloud-consumer-order80 消费者 order Eureka 服务注册
-- cloud-consumer-order80-zk 消费者 order Zookeeper 服务注册
-- cloud-consumer-order80-consul 消费者 order Consul 服务注册
-- cloud-consumer-order80-feign 消费者 order Feign 调用
-- cloud-consumer-order80-feign-hystrix 消费者 order Feign 调用，Hystrix 降级
-- cloud-eureka-server7001 Eureka 服务
-- cloud-eureka-server7002 Eureka 服务
-- cloud-provider-payment8001 提供者 payment Eureka 服务注册
-- cloud-provider-payment8001-hystrix 提供者 payment Hystrix 服务降级
-- cloud-provider-payment8002 提供者 payment Eureka 服务注册
-- cloud-provider-payment8004-zk 提供者 payment zookeeper 服务注册
-- cloud-provider-payment8004-consul 提供者 payment consul 服务注册
-
 ### Diff with Spring Web
 > 截至当前
 1. Module 基本都需要表明自己的 `spring.application.name` 作为服务注册名
@@ -38,7 +22,6 @@
 6. 添加降级、熔断处理代码 `@HystrixCommand`
     - service-itself 常用方法级别 `@HystrixCommand` 和类级别 `@DefaultProperties(defaultFallback = "method-name")`（类内还需要使用 `@HystrixCommand` 指定哪些方法需要 default fallback）
     - consumer-side 常用 `@FeignClient(fallback = xxx.class)`
-
 
 ### SpringCloud 对 SpringBoot 的版本要求
 建议参考 SpringCloud 版本的具体说明，会有具体的 SpringBoot 版本指定。另，可参考 [这里](https://start.spring.io/actuator/info)
@@ -75,10 +58,6 @@
 3. 写 YAML
 4. 主启动类
 5. 业务类
-
-### 参考仓库，用来复制配置等内容
-- [lixiaogou/cloud2020](https://gitee.com/lixiaogou/cloud2020) 比较新
-- [cunjinFS/SpringCloud](https://gitee.com/cunjinFS/SpringCloud) 有 SQL, 脑图等资源
 
 ### IDEA 设置 Spring Devtools
 - [官方文档](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools)
@@ -120,10 +99,6 @@
     - `compiler.automake.allow.when.app.running`
     - `action.System.assertFocusAccessFromEdt`
 5. Reboot IDEA
-
-### 几个比较重要的注解
-- `@EnableDiscoveryClient` 
-- `@LoadBalanced` 负载均衡，貌似和 Ribbon 有关
 
 ### Eureka 的自我保护模式
 属于 CAP 的 AP。策略是暂时认为服务还是可用的，只是现在的网络出现了问题，网络恢复的之后服务就会恢复
@@ -169,6 +144,7 @@ ribbon:
   #指的是建立连接后从服务器读取到可用资源所用的时间
   ConnectTimeout: 5000
 ```
+
 ### Hystrix
 作用：
 - Fallback 降级
