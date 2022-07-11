@@ -1,5 +1,6 @@
 ### 项目目录
 - cloud-api-commons 实体类公共模块
+- cloud-consumer-hystrix-dashboard9001 Hystrix Dashboard
 - cloud-consumer-order80 消费者 order Eureka 服务注册
 - cloud-consumer-order80-zk 消费者 order Zookeeper 服务注册
 - cloud-consumer-order80-consul 消费者 order Consul 服务注册
@@ -27,14 +28,16 @@
     - `@EnableEurekaClient` Eureka 注册 client 使用
     - `@EnableDiscoveryClient` Zookeeper, Consul 注册服务使用
     - `@EnableHystrix` 启用 Hystrix（或者使用 `@EnableCircuitBreaker`）
-5. 服务间调用使用 OpenFeign（内置 Ribbon 支持。使用需要先抽服务接口，开始像 Dubbo 了）
+5. 服务间调用使用 OpenFeign（内置 Ribbon 支持）
     
-    解决了什么问题？服务间调用可以直接使用被调用者的 service 定义（实现类保留 @RequestMapping 变接口 or 接口补充 @RequestMapping）
+    解决了什么问题？服务间调用可以直接使用被调用者的 service 定义（实现类保留 @RequestMapping 变接口 or 接口补充 @RequestMapping 说明请求地址）
     
     新问题：
     1. 启动类只需要添加 `@@EnableFeignClients`，无需再指明服务注册中心的类型，所以是怎么判断的？
     2. 服务 interface 需要带上 `@RequestMapping` 说明，正常编程来说是 interface impl 才指明的，这个时候只能人为联动，容易犯错，有没有更优雅的方式？
-6. 添加降级、熔断处理代码 `@HystrixCommand`（provider-side, consumer-side 皆可）
+6. 添加降级、熔断处理代码 `@HystrixCommand`
+    - service-itself 常用方法级别 `@HystrixCommand` 和类级别 `@DefaultProperties(defaultFallback = "method-name")`（类内还需要使用 `@HystrixCommand` 指定哪些方法需要 default fallback）
+    - consumer-side 常用 `@FeignClient(fallback = xxx.class)`
 
 
 ### SpringCloud 对 SpringBoot 的版本要求
@@ -159,7 +162,7 @@ Ribbon 负载均衡算法自带实现查看 `IRule` 接口，抽象实现 `Abstr
 
 ### OpenFeign 超时
 OpenFeign 的超时由内置的 Ribbon 控制，默认 1s，设置
-```yml
+``` yml
 ribbon:
   #指的是建立连接所用的时间，适用于网络状况正常的情况下, 两端连接所用的时间
   ReadTimeout: 5000
@@ -173,7 +176,7 @@ ribbon:
     降级的维度：
     - 对 service 自己的降级（`@HystrixCommand` 实现），包括 provider, consumer 对自己降级保护 
     - 对 provider 的降级（在 `@FeignClient` 中指明 fallback 属性）
-- Break 熔断（貌似只要启用了，服务端报错就会马上使用降级的服务作替换）
+- CircuitBreak 熔断
 - FlowLimit 限流
 
 Hystrix 的三个功能都可以实现 provider-side 和 consumer-side 的控制
