@@ -1,0 +1,2 @@
+server:
+  port: 9001 # 访问地址：http://localhost:9001/hystrix
