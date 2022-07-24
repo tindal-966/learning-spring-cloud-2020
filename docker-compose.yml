@@ -26,3 +26,8 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+  zipkin2:
+    container_name: zipkin2
+    image: openzipkin/zipkin:2
+    ports:
+      - 9411:9411

@@ -23,6 +23,9 @@
     - service-itself 常用方法级别 `@HystrixCommand` 和类级别 `@DefaultProperties(defaultFallback = "method-name")`（类级别需要注意还需要使用 `@HystrixCommand` 指定哪些 method 需要 default fallback）
     - consumer-side 常用 `@FeignClient(fallback = xxx.class)`
 7. 部分配置文件放置到 Git 某个仓库中单独管理，使用 SpringCloud Config + Bus 来获取以及动态更新
+8. 微服务添加链路跟踪有关依赖和配置
+    - 依赖：spring-cloud-starter-zipkin
+    - 配置：spring.ziplin, spring.sleuth
 
 ### SpringCloud 对 SpringBoot 的版本要求
 建议参考 SpringCloud 版本的具体说明，会有具体的 SpringBoot 版本指定。另，可参考 [这里](https://start.spring.io/actuator/info)
@@ -118,7 +121,7 @@
 - [https://www.baeldung.com/eureka-self-preservation-renewal](https://www.baeldung.com/eureka-self-preservation-renewal)
 - [https://github.com/Netflix/eureka/wiki/Server-Self-Preservation-Mode](https://github.com/Netflix/eureka/wiki/Server-Self-Preservation-Mode)
 
-### Ribbon
+### Ribbon 服务负载均衡
 LoadBalance 的四种方式：
 1. 客户端
 2. 服务端
@@ -146,7 +149,7 @@ ribbon:
   ConnectTimeout: 5000
 ```
 
-### Hystrix
+### Hystrix 服务降级、熔断、限流
 作用：
 - Fallback 降级
     
@@ -220,7 +223,7 @@ public interface ControllerInterface {
 疑问：
 - Gateway 一般用于什么场景？貌似和 Ribbon 负载均衡有一定的重合。所有微服务集合的最外层？
 
-### SpringCloud Config + Bus
+### SpringCloud Config + Bus 配置动态更新
 实现配置信息的 集中管理 + 动态更新
 
 依赖：
@@ -265,3 +268,11 @@ SpringCloud 会创建一个 `Bootstrap Context`，作为 Spring 应用的 `Appli
 疑问：
 - 当前的 Provider 只在项目的配置文件中指明 exchange name，假设项目存在多个 service 都往这个 exchange 中发？Route key 这些怎么配置？
 - 按照当前的类似 RPC 的调用方式真正的使用场景是什么？
+
+### SpringCloud Sleuth 链路追踪（Sleuth, 侦探）
+一般结合 Zipkin 使用
+
+依赖：`spring-cloud-starter-zipkin` 内置 Sleuth
+
+原理：
+一条链路通过 Trace ID 唯一标识，Span 标识发起的请求信息，各 Span 通过 parent id 关联起来。例如：
