@@ -10,7 +10,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import javax.annotation.Resource;
 import java.util.UUID;
 
-@EnableBinding(Source.class) // 绑定 Message
+@EnableBinding(Source.class) // 这里为 Source.class，绑定 Message
 public class MessageProviderServiceImpl implements IMessageProviderService {
     /**
      * 消息发送管道/信道

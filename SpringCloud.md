@@ -254,5 +254,10 @@ SpringCloud 会创建一个 `Bootstrap Context`，作为 Spring 应用的 `Appli
 - Channel 通道，是 Queue 的抽先，在消息通讯系统中就是存储和转发的媒介，通过 Channel 对队列进行配置
 - Source/Sink 从 Stream 发布消息就是输出，接受消息就是输入
 
+注解：
+- `@EnableBinding` 指信道 channel 和 exchange 绑定在一起
+- `@StreamListener` 监听队列，用于消费者的队列消息接收
+
 疑问：
 - 当前的 Provider 只在项目的配置文件中指明 exchange name，假设项目存在多个 service 都往这个 exchange 中发？Route key 这些怎么配置？
+- 按照当前的类似 RPC 的调用方式真正的使用场景是什么？
