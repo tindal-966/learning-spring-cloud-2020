@@ -1,8 +1,8 @@
 ### Diff with Spring Web
 > 截至当前
-1. Module 基本都需要表明自己的 `spring.application.name` 作为服务注册名
+1. Module 基本都需要在 application.yml 中表明自己的 `spring.application.name` 作为服务注册名
 2. 添加了服务注册有关依赖以及有关的连接配置
-    - spring-boot-starter-actuator 在服务注册中暴露 check health 接口
+    - spring-boot-starter-actuator 在服务注册中暴露 check health 等接口
     - 注册中心
       - spring-cloud-starter-netflix-eureka-client 使用 Eureka 注册中心
       - spring-cloud-starter-zookeeper-discovery 使用 Zookeeper 注册中心
@@ -17,10 +17,10 @@
     解决了什么问题？服务间调用可以直接使用被调用者的 service 定义（实现类保留 @RequestMapping 变接口 or 接口补充 @RequestMapping 说明请求地址）
     
     新问题：
-    1. 启动类只需要添加 `@@EnableFeignClients`，无需再指明服务注册中心的类型，所以是怎么判断的？
-    2. 服务 interface 需要带上 `@RequestMapping` 说明，正常编程来说是 interface impl 才指明的，这个时候只能人为联动，容易犯错，有没有更优雅的方式？
+    1. 启动类只需要添加 `@EnableFeignClients`，无需再指明服务注册中心的类型，所以是怎么判断的？
+    2. 服务 interface 的 method 需要带上 `@RequestMapping` 注解，正常编程来说是 interface impl 才指明的，这个时候只能人为联动，容易犯错，有没有更优雅的方式？
 6. 添加降级、熔断处理代码 `@HystrixCommand`
-    - service-itself 常用方法级别 `@HystrixCommand` 和类级别 `@DefaultProperties(defaultFallback = "method-name")`（类内还需要使用 `@HystrixCommand` 指定哪些方法需要 default fallback）
+    - service-itself 常用方法级别 `@HystrixCommand` 和类级别 `@DefaultProperties(defaultFallback = "method-name")`（类级别需要注意还需要使用 `@HystrixCommand` 指定哪些 method 需要 default fallback）
     - consumer-side 常用 `@FeignClient(fallback = xxx.class)`
 
 ### SpringCloud 对 SpringBoot 的版本要求
@@ -32,10 +32,10 @@
     - Zookeeper
     - Consul
     - Nacos
-- 服务调用
+- 服务调用（主要服务调用负载均衡方面）
     - Ribbon
     - LoadBalancer
-- 服务调用2
+- 服务调用2（主要服务调用方面）
     - x Feign
     - OpenFeign
 - 服务降级
@@ -100,16 +100,6 @@
     - `action.System.assertFocusAccessFromEdt`
 5. Reboot IDEA
 
-### Eureka 的自我保护模式
-属于 CAP 的 AP。策略是暂时认为服务还是可用的，只是现在的网络出现了问题，网络恢复的之后服务就会恢复
-> spring-cloud-starter-netflix-eureka-client 默认配置是 CAP 的 AP
->
-> spring-cloud-starter-zookeeper-discovery 默认配置是 CAP 的 CP
-
-参考：
-- [https://www.baeldung.com/eureka-self-preservation-renewal](https://www.baeldung.com/eureka-self-preservation-renewal)
-- [https://github.com/Netflix/eureka/wiki/Server-Self-Preservation-Mode](https://github.com/Netflix/eureka/wiki/Server-Self-Preservation-Mode)
-
 ### Eureka, zookeeper, Consul 异同
 | 组件名 | 语言 | CAP | 服务健康检查 | 对外暴露接口 | SpringCloud 集成 |
 | -- | --- | --- | --- | --- | --- |
@@ -117,8 +107,18 @@
 | Zookeeper | Java | CP | Yes | 客户端 | Y |
 | Consul | Go | CP | Yes | HTTP/DNS | Y |
 
+### Eureka 的自我保护模式 self preservation renewal
+属于 CAP 的 AP。策略是暂时认为服务还是可用的，只是现在的网络出现了问题，网络恢复的之后服务就会恢复
+
+- spring-cloud-starter-netflix-eureka-client 默认配置是 CAP 的 AP 
+- spring-cloud-starter-zookeeper-discovery 默认配置是 CAP 的 CP
+
+参考：
+- [https://www.baeldung.com/eureka-self-preservation-renewal](https://www.baeldung.com/eureka-self-preservation-renewal)
+- [https://github.com/Netflix/eureka/wiki/Server-Self-Preservation-Mode](https://github.com/Netflix/eureka/wiki/Server-Self-Preservation-Mode)
+
 ### Ribbon
-Load Balance 的四种方式：
+LoadBalance 的四种方式：
 1. 客户端
 2. 服务端
 3. 集中式
@@ -127,7 +127,7 @@ Load Balance 的四种方式：
 Ribbon 属于 *客户端+进程内*，Nginx 属于 *服务端+集中式*
 
 Ribbon 负载均衡算法自带实现查看 `IRule` 接口，抽象实现 `AbstractLoadBalancerRule`
-- RoundRobinRule
+- RoundRobinRule 轮询
 - RandomRule
 - RetryRule 先 Round ，获取失败则在有限时重试
 - WeightedResponseTimeRule(extends RoundRobinRule) 选择响应速度快的
@@ -167,9 +167,9 @@ provider, consumer 是有意义的。如果使用 client, server 容易混乱，
 大致说明：Spring 旧版本会将带有 `@RequestMapping` 注解的接口/类注册为 HandlerMethods，导致后续真正需要注册的实现类冲突（顺序也有可能反过来，总之就是重复注册）
 
 解决：
-- 使用 `@FeignClient` 的 path 替代 `@RequestMapping`
-- 将 `@RequestMapping` 全部复制到 method 中
-- 按照参考的第一个链接做修改
+- 使用 `@FeignClient` 的 path 替代 class-level 的 `@RequestMapping`
+- 将 class-level 的 `@RequestMapping` 全部复制到 method 中
+- 按照 参考 的第一个链接做修改
 
 参考：
 - [中文的代码分析](https://blog.csdn.net/aileitianshi/article/details/95980329)
@@ -179,6 +179,7 @@ provider, consumer 是有意义的。如果使用 client, server 容易混乱，
     > [v3.1.3 doc](https://docs.spring.io/spring-cloud-openfeign/docs/3.1.3/reference/html/#spring-cloud-feign-inheritance)
 
 补充：Spring Web 新建 Controller 新建接口并添加 `@RequestMapping` 注解导致的一些问题
+> 不知道和上面的有没有关系，还是说只是单纯是因为实现类继承了接口的 `@RequestMapping` 注解
 ``` java
 // 依赖：
 //<dependency>
