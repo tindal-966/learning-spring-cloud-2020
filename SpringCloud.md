@@ -219,3 +219,10 @@ public interface ControllerInterface {
 
 ### SpringCloud Config + Bus
 SpringCloud Config 集中化的外部配置中心
+
+### bootstrap.yml VS application.yml
+application.yml 用户级的资源配置项
+bootstrap.yml 系统级的，优先级更高
+
+SpringCloud 会创建一个 `Bootstrap Context`，作为 Spring 应用的 `Application Context` 的父上下文。
+初始化的时候，Bootstrap Context 负责从外部源加载配置属性并解析配置。这两个上下文共享一个从外部获取的 Environment
