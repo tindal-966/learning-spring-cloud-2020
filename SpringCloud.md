@@ -22,6 +22,7 @@
 6. 添加降级、熔断处理代码 `@HystrixCommand`
     - service-itself 常用方法级别 `@HystrixCommand` 和类级别 `@DefaultProperties(defaultFallback = "method-name")`（类级别需要注意还需要使用 `@HystrixCommand` 指定哪些 method 需要 default fallback）
     - consumer-side 常用 `@FeignClient(fallback = xxx.class)`
+7. 部分配置文件放置到 Git 某个仓库中单独管理，使用 SpringCloud Config + Bus 来获取以及动态更新
 
 ### SpringCloud 对 SpringBoot 的版本要求
 建议参考 SpringCloud 版本的具体说明，会有具体的 SpringBoot 版本指定。另，可参考 [这里](https://start.spring.io/actuator/info)
@@ -209,6 +210,8 @@ public interface ControllerInterface {
 - 如果 Controller 添加 `@RequestMapping("/other")`，调用 `/other/hello` 正常，调用 `/i/hello` 404
 
 ### SpringCloud Gateway
+依赖：`spring-cloud-starter-gateway`
+
 核心概念：
 - Route 路由
 - Predicate 断言（断言为 true 则路由）
@@ -218,7 +221,23 @@ public interface ControllerInterface {
 - Gateway 一般用于什么场景？貌似和 Ribbon 负载均衡有一定的重合。所有微服务集合的最外层？
 
 ### SpringCloud Config + Bus
-SpringCloud Config 集中化的外部配置中心
+实现配置信息的 集中管理 + 动态更新
+
+依赖：
+- config server: `spring-cloud-config-server`
+- config client: `spring-cloud-starter-config`
+- bus: `spring-cloud-starter-bus-amqp`
+
+- SpringCloud Config 集中化的外部配置中心
+- SpringCloud Bus 利用消息总线更新配置
+
+BUS 的两种触发更新的方式：
+- 利用 BUS 触发一个客户端 /bus/refresh，而刷新所有客户端的配置（刷新客户端，传染其他客户端）
+  
+    POST http://localhost:xxx/actuator/refresh
+- 利用 BUS 触发服务端 ConfigService 的 /bus-refresh，而刷新所有客户端的配置（刷新服务端，通知客户端）
+
+    GET http://localhost:xxx/actuator/bus-refresh
 
 ### bootstrap.yml VS application.yml
 application.yml 用户级的资源配置项

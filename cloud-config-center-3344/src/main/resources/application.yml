@@ -13,8 +13,20 @@ spring:
             - springcloud-config
       label: master #读取分支
       #启动成功后访问的路径 http://ip:3344/{label}/{application}-{profile}.yml 能访问的配置文件 就表示成功了
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:7001/eureka
+
+# 暴露 BUS 刷新的端点
+management:
+  endpoint:
+    web:
+      exposure:
+        include: 'bus-refresh' # 刷新地址为：http://localhost:3344/actuator/bus-refresh

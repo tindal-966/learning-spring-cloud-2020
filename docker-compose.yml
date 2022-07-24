@@ -20,3 +20,9 @@ services:
     image: consul:1.12
     ports:
       - 8500:8500
+  rabbitmq3.10:
+    container_name: rabbitmq3.10
+    image: rabbitmq:3.10-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
