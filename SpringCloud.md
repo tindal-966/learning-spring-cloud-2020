@@ -208,8 +208,14 @@ public interface ControllerInterface {
 - 如果 Controller 也添加 `@RequestMapping("/i")`，调用 `/i/hello` 正常
 - 如果 Controller 添加 `@RequestMapping("/other")`，调用 `/other/hello` 正常，调用 `/i/hello` 404
 
-### Gateway
+### SpringCloud Gateway
 核心概念：
 - Route 路由
 - Predicate 断言（断言为 true 则路由）
 - Filter 过滤器（筛选请求、修改请求）
+
+疑问：
+- Gateway 一般用于什么场景？貌似和 Ribbon 负载均衡有一定的重合。所有微服务集合的最外层？
+
+### SpringCloud Config + Bus
+SpringCloud Config 集中化的外部配置中心
