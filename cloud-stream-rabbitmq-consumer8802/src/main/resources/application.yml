@@ -21,6 +21,7 @@ spring:
           destination: aExchangeName # 表示要使用的Exchange名称定义
           content-type: application/json # 设置消息类型，本次为json，文本则设置“text/plain”
           binder: aBinderName  # 设置要绑定的消息服务的具体设置（上面定义的名字）
+          group: ${spring.application.name}
 
 eureka:
   client: # 客户端进行Eureka注册的配置
