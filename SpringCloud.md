@@ -212,4 +212,4 @@ public interface ControllerInterface {
 核心概念：
 - Route 路由
 - Predicate 断言（断言为 true 则路由）
-- Filter 过滤器（修改请求）
+- Filter 过滤器（筛选请求、修改请求）
