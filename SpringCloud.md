@@ -258,6 +258,9 @@ SpringCloud 会创建一个 `Bootstrap Context`，作为 Spring 应用的 `Appli
 - `@EnableBinding` 指信道 channel 和 exchange 绑定在一起
 - `@StreamListener` 监听队列，用于消费者的队列消息接收
 
+注意：
+- Stream 中同一个 Group 的多个消费者是竞争关系（最终只有一个消费者可以消费到消息），不同组的是可以全面消费的（即重复消费）（一个生产者，多个消费者的情况下，如果消费者们没有在分组处理，则默认是不同组会重复消费）
+
 疑问：
 - 当前的 Provider 只在项目的配置文件中指明 exchange name，假设项目存在多个 service 都往这个 exchange 中发？Route key 这些怎么配置？
 - 按照当前的类似 RPC 的调用方式真正的使用场景是什么？
