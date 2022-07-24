@@ -207,3 +207,9 @@ public interface ControllerInterface {
 此时，调用 `/hello` 404，调用 `/i/hello` 正常
 - 如果 Controller 也添加 `@RequestMapping("/i")`，调用 `/i/hello` 正常
 - 如果 Controller 添加 `@RequestMapping("/other")`，调用 `/other/hello` 正常，调用 `/i/hello` 404
+
+### Gateway
+核心概念：
+- Route 路由
+- Predicate 断言（断言为 true 则路由）
+- Filter 过滤器（修改请求）
