@@ -237,7 +237,7 @@ BUS 的两种触发更新的方式：
     POST http://localhost:xxx/actuator/refresh
 - 利用 BUS 触发服务端 ConfigService 的 /bus-refresh，而刷新所有客户端的配置（刷新服务端，通知客户端）
 
-    GET http://localhost:xxx/actuator/bus-refresh
+    GET http://localhost:xxx/actuator/bus-refresh</service-name:service-port> 支持全部更新以及指定个别微服务更新
 
 ### bootstrap.yml VS application.yml
 application.yml 用户级的资源配置项
