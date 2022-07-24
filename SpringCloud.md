@@ -245,3 +245,14 @@ bootstrap.yml 系统级的，优先级更高
 
 SpringCloud 会创建一个 `Bootstrap Context`，作为 Spring 应用的 `Application Context` 的父上下文。
 初始化的时候，Bootstrap Context 负责从外部源加载配置属性并解析配置。这两个上下文共享一个从外部获取的 Environment
+
+### SpringCloud Stream
+解决问题：屏蔽底层消息中间件的差异，降低切换成本，统一消息的编程模型（类似 JDBC）
+
+核心概念：
+- Binder 连接中间件，屏蔽差异
+- Channel 通道，是 Queue 的抽先，在消息通讯系统中就是存储和转发的媒介，通过 Channel 对队列进行配置
+- Source/Sink 从 Stream 发布消息就是输出，接受消息就是输入
+
+疑问：
+- 当前的 Provider 只在项目的配置文件中指明 exchange name，假设项目存在多个 service 都往这个 exchange 中发？Route key 这些怎么配置？
