@@ -31,3 +31,10 @@ services:
     image: openzipkin/zipkin:2
     ports:
       - 9411:9411
+  nacos2.1:
+    container_name: nacos2.1
+    image: nacos/nacos-server:v2.1.0-slim
+    ports:
+      - 8848:8848
+    environment:
+      MODE: standalone
