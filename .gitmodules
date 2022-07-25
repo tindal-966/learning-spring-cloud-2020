@@ -1,0 +1,3 @@
+[submodule "nacos-docker"]
+	path = nacos-docker
+	url = git@github.com:nacos-group/nacos-docker.git
