@@ -292,3 +292,28 @@ SpringCloud 会创建一个 `Bootstrap Context`，作为 Spring 应用的 `Appli
 - 阿里云短信服务：覆盖全球的短信服务，友好、高效、智能的互联化通讯能力，帮助企业迅速搭建客户触达通道。
 
 ### Alibaba Nacos
+Nacos 服务发现实例模型：
+- 临时实例（Eureka, Zookeeper）
+  - 客户端上传健康状态
+  - 摘除不健康状态
+  - 非持久化
+- 持久化实例（Consul, CoreDns）
+  - 服务端探测健康状态
+  - 保留不健康实例
+  - 持久化
+
+特性对比（截至 2020 年）：
+| | Nacos | Eureka | Consul | CoreDns | Zookeeper |
+| --- | --- | --- | --- | --- | --- |
+| 一致性协议 | CP + AP | AP | CP | - | CP |
+| 健康检查 | TCP/HTTP/MySQL/Client Beat | Client Beat | TCP/HTTP/gRPC/Cmd | - | Client Beat |
+| 负载均衡 | 权重/DSL/metadata/CMDB | Ribbon | Fabio | RR | - |
+| 雪崩保护 | Y | Y | N | N | N |
+| 自动注销实例 | Y | Y | N | N | Y |
+| 访问协议 | HTTP/DNS/UDP | HTTP | HTTP/DNS | DNS | TCP |
+| 监听支持 | Y | Y | Y | N | Y |
+| 多数据中心 | Y | Y | Y | N | N |
+| 跨注册中心 | Y | N | Y | N | N |
+| SpringCloud 集成 | Y | Y | Y | N | N |
+| Dubbo 集成 | Y | N | N | N | N |
+| K8s 集成 | Y | N | Y | N | N |
