@@ -291,7 +291,10 @@ SpringCloud 会创建一个 `Bootstrap Context`，作为 Spring 应用的 `Appli
 - 阿里云对象存储：阿里云提供的海量、安全、低成本、高可靠的云存储服务。支持在任何应用、任何时间、任何地点存储和访问任意类型的数据。
 - 阿里云短信服务：覆盖全球的短信服务，友好、高效、智能的互联化通讯能力，帮助企业迅速搭建客户触达通道。
 
-### Alibaba Nacos
+### Alibaba Nacos & Sentinel
+- Nacos [Github](https://github.com/alibaba/nacos) & [website](https://nacos.io)
+- Sentinel [Github](https://github.com/alibaba/sentinel) & [website](https://sentinel.io)
+
 Nacos 服务发现实例模型：
 - 临时实例（Eureka, Zookeeper）
   - 客户端上传健康状态
@@ -302,7 +305,7 @@ Nacos 服务发现实例模型：
   - 保留不健康实例
   - 持久化
 
-特性对比（截至 2020 年）：
+Nacos 特性对比（截至 2020 年）：
 | | Nacos | Eureka | Consul | CoreDns | Zookeeper |
 | --- | --- | --- | --- | --- | --- |
 | 一致性协议 | CP + AP | AP | CP | - | CP |
@@ -317,3 +320,10 @@ Nacos 服务发现实例模型：
 | SpringCloud 集成 | Y | Y | Y | N | N |
 | Dubbo 集成 | Y | N | N | N | N |
 | K8s 集成 | Y | N | Y | N | N |
+
+Sentinel 主要功能：
+- 流量控制
+- 熔断降级
+- 热点参数限流
+- 系统自适应保护（系统级别规则）
+> 分别对应 Dashboard 上面的 流控、降级、热点、系统规则
