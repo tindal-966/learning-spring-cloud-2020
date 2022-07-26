@@ -28,7 +28,7 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
-        <!--SpringCloud ailibaba sentinel-datasource-nacos 后续sentinel做持久化用到-->
+        <!--SpringCloud ailibaba sentinel-datasource-nacos sentinel 配置持久化使用，参考：https://sentinelguard.io/zh-cn/docs/dynamic-rule-configuration.html -->
         <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-datasource-nacos</artifactId>
