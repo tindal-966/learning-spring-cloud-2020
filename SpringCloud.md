@@ -7,22 +7,26 @@
       - spring-cloud-starter-netflix-eureka-client 使用 Eureka 注册中心
       - spring-cloud-starter-zookeeper-discovery 使用 Zookeeper 注册中心
       - spring-cloud-starter-consul-discovery 使用 Consul 注册中心
-3. 需要启动有关的注册中心，Eureka/Zookeeper/Consul（Eureka 注册中心需要自编码并启动）
+      - spring-cloud-starter-alibaba-nacos-discovery 使用 Alibaba Nacos 作为注册中心
+3. 需要启动有关的注册中心，Eureka/Zookeeper/Consul/Nacos（Eureka 注册中心需要自编码并启动）
 4. 启动类添加注解
-    - `@EnableEurekaClient` Eureka 注册 client 使用
-    - `@EnableDiscoveryClient` Zookeeper, Consul 注册服务使用
-    - `@EnableHystrix` 启用 Hystrix（或者使用 `@EnableCircuitBreaker`）
-5. 服务间调用使用 OpenFeign（内置 Ribbon 支持）
+    - `@EnableDiscoveryClient` Zookeeper, Consul, Nacos 注册服务使用（或 `@EnableEurekaClient` Eureka 注册 client 使用）
+    - 其他
+      - `@EnableFeignClients` 启用 OpenFeign 服务间调用
+      - `@EnableHystrix` 启用 Hystrix（或者使用 `@EnableCircuitBreaker`）
+5. 服务间调用使用 OpenFeign（内置 Ribbon 支持），`@FeignClient`
     
     解决了什么问题？服务间调用可以直接使用被调用者的 service 定义（实现类保留 @RequestMapping 变接口 or 接口补充 @RequestMapping 说明请求地址）
-    
-    新问题：
+
+   疑问：
     1. 启动类只需要添加 `@EnableFeignClients`，无需再指明服务注册中心的类型，所以是怎么判断的？
     2. 服务 interface 的 method 需要带上 `@RequestMapping` 注解，正常编程来说是 interface impl 才指明的，这个时候只能人为联动，容易犯错，有没有更优雅的方式？
-6. 添加降级、熔断处理代码 `@HystrixCommand`
-    - service-itself 常用方法级别 `@HystrixCommand` 和类级别 `@DefaultProperties(defaultFallback = "method-name")`（类级别需要注意还需要使用 `@HystrixCommand` 指定哪些 method 需要 default fallback）
-    - consumer-side 常用 `@FeignClient(fallback = xxx.class)`
-7. 部分配置文件放置到 Git 某个仓库中单独管理，使用 SpringCloud Config + Bus 来获取以及动态更新
+6. 添加降级、熔断处理代码
+    1. Hytrix `@HystrixCommand`
+       - service-itself 常用方法级别 `@HystrixCommand` 和类级别 `@DefaultProperties(defaultFallback = "method-name")`（类级别需要注意还需要使用 `@HystrixCommand` 指定哪些 method 需要 default fallback）
+       - consumer-side 常用 `@FeignClient(fallback = xxx.class)`
+    2. Sentinel `@SentinelResource`，注意 fallbackHandler 和 blockHandler 的区别
+7. 部分配置文件放置到 Git 某个仓库中单独管理，使用 SpringCloud Config + Bus 来获取以及动态更新 `@@EnableBinding`
 8. 微服务添加链路跟踪有关依赖和配置
     - 依赖：spring-cloud-starter-zipkin
     - 配置：spring.ziplin, spring.sleuth
@@ -55,13 +59,6 @@
 - 服务总线
     - x Bus
     - Nacos
-
-### 添加微服务模块
-1. 建 module
-2. 改 POM
-3. 写 YAML
-4. 主启动类
-5. 业务类
 
 ### IDEA 设置 Spring Devtools
 - [官方文档](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools)
@@ -104,7 +101,7 @@
     - `action.System.assertFocusAccessFromEdt`
 5. Reboot IDEA
 
-### Eureka, zookeeper, Consul 异同
+### Eureka, zookeeper, Consul, Nacos 异同
 | 组件名 | 语言 | CAP | 服务健康检查 | 对外暴露接口 | SpringCloud 集成 |
 | -- | --- | --- | --- | --- | --- |
 | Eureka | Java | AP | 可配支持 | HTTP | Y |
@@ -243,6 +240,8 @@ BUS 的两种触发更新的方式：
 
     GET http://localhost:xxx/actuator/bus-refresh</service-name:service-port> 支持全部更新以及指定个别微服务更新
 
+> 虽然 SpringCloud Config + Bus 依赖 Git 作为配置中心有点麻烦，但好像比 Nacos 直接页面配置或者 MySQL 保存在历史版本和迁移方面更有优势
+
 ### bootstrap.yml VS application.yml
 application.yml 用户级的资源配置项
 bootstrap.yml 系统级的，优先级更高
@@ -331,13 +330,21 @@ Sentinel 主要功能：
 
 Seata 核心概念：
 - Transaction ID, XID 全局唯一的事务 ID
-- TC (Transaction Coordinator) - 事务协调者
-- TM (Transaction Manager) - 事务管理器
-- RM (Resource Manager) - 资源管理器
+- TC (Transaction Coordinator) - 事务协调者（一般来说就是 Seata 服务器）
+- TM (Transaction Manager) - 事务管理器（一般来说就是标注 @GlobalTransactional 的方法，是事务的发起方）
+- RM (Resource Manager) - 资源管理器（一般来说就是方法内涉及到的数据源，是事务的参与方）
 
-Seata 流程：
+Seata 执行流程：
 1. TM 向 TC 申请开启一个全局事务，全局事务创建成功并生成一个全局唯一的 XID
 2. XID 在微服务调用链路的上下文中传播
-3. RM 向 TC 注册分支事务，将其纳入 XID 对应的全局事务的管辖
-4. TM 向 TC 发起针对 XID 的全局提交或回滚决议
-5. TC 调度 XID 下管辖的全部分支事务完成提交或回滚提交
+3. RM 向 TC 注册分支事务，将其纳入 XID 对应的全局事务的管辖（RM 向 TC 汇报资源准备状态）
+4. TM 向 TC 发起针对 XID 的全局提交或回滚决议（此时，TM 结束分布式事务，事务一阶段结束，TM 通知 TC 事务结果：提交或回滚）
+5. TC 调度 XID 下管辖的全部分支事务完成提交或回滚提交（TC 通知所有 RM 去提交或者回滚，事务二阶结束）
+
+Seata 四种模式：
+- AT
+- TCC
+- SAGA
+- XA
+
+Seata [快速开始](http://seata.io/zh-cn/docs/user/quickstart.html) & [AT 模式](http://seata.io/zh-cn/docs/dev/mode/at-mode.html)

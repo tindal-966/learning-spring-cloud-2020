@@ -24,8 +24,19 @@
 - cloud-config-client-3355 SpringCloud Config 客户端
 - cloud-config-client-3366 SpringCloud Config 客户端（与 3355 一致，为了演示同时通过 RabbitMQ 更新配置文件）
 - cloud-stream-rabbitmq-provider8801 SpringCloud Stream 提供者
-- cloud-stream-rabbitmq-provider8802 SpringCloud Stream 消费者
-- cloud-stream-rabbitmq-consumer8803 SpringCloud Stream 消费者（和 8802 一致，为了演示分组的设置防止消息重复消费）
+- cloud-stream-rabbitmq-provider8802 SpringCloud Stream 提供者（和 8802 一致，为了演示分组的设置防止消息重复消费）
+- cloud-stream-rabbitmq-consumer8803 SpringCloud Stream 消费者
+- cloudalibaba-provider-payment9001 SpringCloud Alibaba 提供者 Naocs 注册中心
+- cloudalibaba-provider-payment9002 SpringCloud Alibaba 提供者 Naocs 注册中心（和 9001 一致）
+- cloudalibaba-consumer-order83 SpringCloud Alibaba 消费者 Naocs 注册中心
+- cloudalibaba-config-client3377 SpringCloud Alibaba Nacos 配置中心
+- cloudalibaba-sentinel-service8401 Alibaba Sentinel Demo
+- cloudalibaba-provider-payment9003 Alibaba Sentinel OpenFeign 提供者
+- cloudalibaba-provider-payment9004 Alibaba Sentinel OpenFeign 提供者（和 9003 一致）
+- cloudalibaba-consumer-order84 Alibaba Sentinel OpenFeign 消费者
+- seata-order-service2001 Alibaba Seata 订单微服务
+- seata-storage-service2002 Alibaba Seata 库存微服务
+- seata-account-service2003 Alibaba Seata 账户微服务
 
 ### 参考
 - [lixiaogou/cloud2020](https://gitee.com/lixiaogou/cloud2020) 比较新
