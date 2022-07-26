@@ -38,6 +38,7 @@
     <module>cloudalibaba-provider-payment9004</module>
     <module>cloudalibaba-consumer-order84</module>
     <module>seata-order-service2001</module>
+    <module>seata-storage-service2002</module>
   </modules>
   <packaging>pom</packaging>
 
