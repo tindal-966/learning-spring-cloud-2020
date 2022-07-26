@@ -291,9 +291,10 @@ SpringCloud 会创建一个 `Bootstrap Context`，作为 Spring 应用的 `Appli
 - 阿里云对象存储：阿里云提供的海量、安全、低成本、高可靠的云存储服务。支持在任何应用、任何时间、任何地点存储和访问任意类型的数据。
 - 阿里云短信服务：覆盖全球的短信服务，友好、高效、智能的互联化通讯能力，帮助企业迅速搭建客户触达通道。
 
-### Alibaba Nacos & Sentinel
+### Alibaba Nacos & Sentinel & Seata
 - Nacos [Github](https://github.com/alibaba/nacos) & [website](https://nacos.io)
 - Sentinel [Github](https://github.com/alibaba/sentinel) & [website](https://sentinel.io)
+- Seata [Github](https://github.com/alibaba/seata) & [website](https://seata.io)
 
 Nacos 服务发现实例模型：
 - 临时实例（Eureka, Zookeeper）
@@ -327,3 +328,16 @@ Sentinel 主要功能：
 - 热点参数限流
 - 系统自适应保护（系统级别规则）
 > 分别对应 Dashboard 上面的 流控、降级、热点、系统规则
+
+Seata 核心概念：
+- Transaction ID, XID 全局唯一的事务 ID
+- TC (Transaction Coordinator) - 事务协调者
+- TM (Transaction Manager) - 事务管理器
+- RM (Resource Manager) - 资源管理器
+
+Seata 流程：
+1. TM 向 TC 申请开启一个全局事务，全局事务创建成功并生成一个全局唯一的 XID
+2. XID 在微服务调用链路的上下文中传播
+3. RM 向 TC 注册分支事务，将其纳入 XID 对应的全局事务的管辖
+4. TM 向 TC 发起针对 XID 的全局提交或回滚决议
+5. TC 调度 XID 下管辖的全部分支事务完成提交或回滚提交
