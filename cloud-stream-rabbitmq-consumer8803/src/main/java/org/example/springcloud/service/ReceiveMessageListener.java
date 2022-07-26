@@ -1,4 +1,4 @@
-package springcloud.service;
+package org.example.springcloud.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.annotation.EnableBinding;
