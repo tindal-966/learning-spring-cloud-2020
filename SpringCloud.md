@@ -10,7 +10,7 @@
       - spring-cloud-starter-alibaba-nacos-discovery 使用 Alibaba Nacos 作为注册中心
 3. 需要启动有关的注册中心，Eureka/Zookeeper/Consul/Nacos（Eureka 注册中心需要自编码并启动）
 4. 启动类添加注解
-    - `@EnableDiscoveryClient` Zookeeper, Consul, Nacos 注册服务使用（或 `@EnableEurekaClient` Eureka 注册 client 使用）
+    - `@EnableDiscoveryClient` Eureka, Zookeeper, Consul, Nacos 注册服务使用（Eureka 还可以使用 `@EnableEurekaClient`）
     - 其他
       - `@EnableFeignClients` 启用 OpenFeign 服务间调用
       - `@EnableHystrix` 启用 Hystrix（或者使用 `@EnableCircuitBreaker`）
@@ -220,6 +220,9 @@ public interface ControllerInterface {
 
 疑问：
 - Gateway 一般用于什么场景？貌似和 Ribbon 负载均衡有一定的重合。所有微服务集合的最外层？
+
+    是的，用在所有微服务的最外层。因为如果前端需要调用微服务，不可能知道具体哪个接口对应哪个微服务，哪个微服务对应哪个端口，所以前端是直接调用网关的端口
+- 网关是怎么转发路由的（就什么都不配，就直接启动一个网关）？直接抹除端口按照 URI 来转发？如果不同类型的微服务（不是横向拓展）的 URI 相同，此时端口不同，是怎么处理的？
 
 ### SpringCloud Config + Bus 配置动态更新
 实现配置信息的 集中管理 + 动态更新
