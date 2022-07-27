@@ -224,6 +224,17 @@ public interface ControllerInterface {
     是的，用在所有微服务的最外层。因为如果前端需要调用微服务，不可能知道具体哪个接口对应哪个微服务，哪个微服务对应哪个端口，所以前端是直接调用网关的端口
 - 网关是怎么转发路由的（就什么都不配，就直接启动一个网关）？直接抹除端口按照 URI 来转发？如果不同类型的微服务（不是横向拓展）的 URI 相同，此时端口不同，是怎么处理的？
 
+    什么都不配是不可行的，需要配置 **特定的 URI 对应的服务 ID** （因为使用了注册中心，所以直接服务 ID 即可，横向拓展、端口号这些都由注册中心解决）。一个 Zuul 的配置示例：
+    ``` yml
+    zuul:
+        routes:
+            account:
+                  path: /restful/accounts/**
+                  serviceId: account
+                  stripPrefix: false
+                  sensitiveHeaders: "*"
+    ```
+
 ### SpringCloud Config + Bus 配置动态更新
 实现配置信息的 集中管理 + 动态更新
 
